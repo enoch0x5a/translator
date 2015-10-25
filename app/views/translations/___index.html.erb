@@ -1,0 +1,17 @@
+- unless translations_collection.empty? do
+  = table_for translations_collection do
+    
+    = column :title => I18n.t(:input_text) do |translation|
+    = link_to(translation.input_text, translation)
+    
+    = column :output_text, :title => I18n.t(:output_text) do |text|
+      - text
+
+    = column :from_lang, :title => I18n.t(:from_lang) do |abbrev|
+      - language_name_for abbrev
+    
+    = column :to_lang, :title => I18n.t(:to_lang) do |abbrev|
+      - language_name_for abbrev
+
+    = column :title => '' do |translation|
+      - link_to(I18n.t(:delete), translation_path(translation), method: :delete)

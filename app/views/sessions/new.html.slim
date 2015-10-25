@@ -1,0 +1,15 @@
+h2 Log in!
+= form_tag sessions_create_path do
+  p
+    = label_tag :name
+    = text_field_tag :name
+  p
+    = label_tag :password
+    = password_field_tag :password
+  p
+    = submit_tag 'Log in'
+p
+  '
+  = link_to 'sign in', sign_in_path
+  '  or
+  = link_to 'try', translations_path

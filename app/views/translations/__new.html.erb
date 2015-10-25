@@ -1,0 +1,23 @@
+= form_for translation do |f|
+  table
+    tbody
+      tr
+        td
+          = check_box_tag(:auto, '1', options: {checked: '1'})
+          = f.label(:auto, "auto")
+        td
+          = f.select(:from_lang, languages_select_options )
+        td
+          = f.select(:to_lang, languages_select_options )
+        td
+          = f.submit(:translate, value: (I18n.t 'translate') )
+      tr
+        td colspan="2"
+          = f.text_area(:input_text)
+        td colspan="2"
+          = f.text_area(:output_text, {disabled: 'disabled'})
+&submit style='float: right' id='save_btn' value='save'
+br
+
+= render 'translations/index'
+

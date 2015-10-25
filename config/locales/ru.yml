@@ -1,0 +1,10 @@
+ru: 
+  translate: "Перевести"
+  pronounce: "Произнести"
+  save: "Сохранить"
+  input_text: "Текст"
+  output_text: "Перевод"
+  to_lang: "в"
+  from_lang: "из"
+  delete: "удалить"
+  all: "Все"
