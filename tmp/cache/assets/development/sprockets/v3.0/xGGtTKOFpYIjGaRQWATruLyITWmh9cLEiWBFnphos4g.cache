@@ -1,0 +1,25 @@
+I"‹(function() {
+  var save_proc;
+
+  save_proc = function() {
+    $("#speak_out_btn").click(function() {
+      return $("#pronounce")[0].play();
+    });
+    return $("#save_btn").click(function() {
+      return $.post("translations/save", {
+        'translation[input_text]': $("#translation_input_text")[0].value,
+        'translation[output_text]': $("#translation_output_text")[0].value,
+        'translation[from_lang]': $("#translation_from_lang")[0].value,
+        'translation[to_lang]': $("#translation_to_lang")[0].value
+      });
+    });
+  };
+
+  $(document).ready(save_proc);
+
+  $(document).on({
+    page: load
+  }, save_proc);
+
+}).call(this);
+:ET

@@ -1,0 +1,9 @@
+I"”(function() {
+  $(function() {
+    return $("speak_out_btn").click(function(e) {
+      return $(".pronounce").play();
+    });
+  });
+
+}).call(this);
+:ET

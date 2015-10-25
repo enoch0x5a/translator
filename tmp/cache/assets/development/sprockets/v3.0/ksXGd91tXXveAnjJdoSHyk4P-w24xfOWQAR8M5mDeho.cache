@@ -1,0 +1,13 @@
+I"'(function() {
+  var player, player_button, text;
+
+  player = document.getElementById('pronounce');
+
+  text = document.getElementById('translation_output_text').textContent;
+
+  player_button = document.getElementById('speak_out_btn');
+
+  player_button.on('click', player.play());
+
+}).call(this);
+:ET
