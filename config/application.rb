@@ -40,9 +40,8 @@ module Translator
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
-    YandexTranslator::configure.api_key =
-      'trnsl.1.1.20150825T115444Z.00d73824cf4fe80e.7d97b17f9ab50f4d580448552ea621c23200dea2'
-    
+    YandexTranslator::configure.api_key = ''
+
     self.translator = YandexTranslator::Yat.new(:json)
     
     self.translation_directions =
