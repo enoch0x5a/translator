@@ -1,6 +1,6 @@
 == README
 
   In order to run Yandex Translator API key must be provided at 
-  condifg/application.rb:
+  config/application.rb:
 
     YandexTranslator::configure.api_key = '<YOUR KEY GOES HERE>'
