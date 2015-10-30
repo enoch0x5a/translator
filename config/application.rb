@@ -16,12 +16,12 @@ module Translator
     def parse_translation_directions(t_d)
       translation_directions = Hash.new { |hash, key| hash[key] = Array.new }
       
-      t_d["dirs"].each do |dir|
+      t_d['dirs'].each do |dir|
         from, from, to = */(\w+)-(\w+)/.match(dir)
         translation_directions[from] << to
       end
 
-      { "dirs" => translation_directions, "langs" => t_d["langs"]}
+      { :dirs => translation_directions, :langs => t_d['langs'] }
     end
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
