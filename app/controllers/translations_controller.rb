@@ -11,7 +11,6 @@ class TranslationsController < ApplicationController
   end
 
   def new
-
   end
 
   def create
@@ -65,7 +64,11 @@ class TranslationsController < ApplicationController
 
 private
   def translation
-    @translation ||= Translation.new
+    if params['translation']
+      @translation ||= Translation.new(translation_params)
+    else
+      @translation ||= Translation.new
+    end
   end
 
   def translation_params
@@ -81,7 +84,7 @@ private
   end
 
   def determine_lang(text)
-    translator.detect(text: text)
+    translator.detect_language(text: text)
   end
 
   def languages_select_options
@@ -92,8 +95,9 @@ private
     translation_directions[:langs][abbrev]
   end
 
+  # TODO: refactor it. Move method to model class
   def translate(auto_lang = nil)
-    output_language = auto_lang ? translation.to_lang : "#{translation.from_lang}-#{translation.to_lang}"
-    translator.translate @translation.input_text, to: output_language
+    translation_direction = auto_lang ? translation.to_lang : "#{translation.from_lang}-#{translation.to_lang}"
+    translator.translate translation.input_text, to: translation_direction
   end
 end
