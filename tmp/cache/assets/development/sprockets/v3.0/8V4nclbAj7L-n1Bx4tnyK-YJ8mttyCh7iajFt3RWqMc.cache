@@ -1,9 +1,0 @@
-I"˜(function() {
-  $(function() {
-    return $("#speak_out_btn").click(function(e) {
-      return $("#pronounce")[0].play();
-    });
-  });
-
-}).call(this);
-:ET
