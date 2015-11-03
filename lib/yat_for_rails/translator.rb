@@ -1,28 +1,45 @@
 require 'yat'
-require 'rails'
-require 'i18n'
+
+require 'rails/all'
 
 module YatForRails
+  include YandexTranslator
   class YatForRails::Translator < YandexTranslator::Yat
 
     def initialize(params = {})
       format = params[:format] || :json
 
       super(format)
-      @locale = params[:locale] || Rails.application.config.i18n.default_locale
+      @locale = params[:locale] || Rails.application.config.i18n.default_locale || :en
     end
 
     def translation_directions
       @translation_directions ||= parse_translation_directions(get_languages(ui: @locale))
     end
 
-    def detect(text)
-      super(text: text)['lang']
+    alias_method :detect_language, :detect
+    def detect_language(params = {})
+      text = params[:text] or return
+      detect(text: text)['lang']
     end
 
-    def translate(text, params)
-      text = text
-      lang = params[:to] || detect(text)
+    def translate(text, to_lang)
+      text = \
+        if text.kind_of? String
+          text
+        elsif text.respond_to? :to_s
+          text.to_s
+        end
+      raise TypeError unless text
+
+      lang = \
+        if to_lang.kind_of? String
+          to_lang
+        else
+          to_lang[:to]
+        end
+      raise TypeError unless lang
+
       super(text: text, lang: lang)['text']
     end
 
@@ -38,6 +55,5 @@ module YatForRails
 
       { :dirs => translation_directions, :langs => t_d['langs'] }
     end
-
   end
 end
