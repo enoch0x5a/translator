@@ -6,6 +6,6 @@ $( ->
       'translation[from_lang]' : $("select#translation_from_lang")[0].value,
       'translation[to_lang]' : $("select#translation_to_lang")[0].value
     })
-    location = location
+    document.location = document.location
   )
 )
