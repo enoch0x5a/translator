@@ -7,8 +7,7 @@ Rails.application.routes.draw do
   resources :users
 
 
-  # root 'translate#translate'
-  root 'translate#translate'
+  root 'sessions#new'
   get 'login' => 'sessions#new', :as => 'login'
   get 'logout' => 'sessions#destroy', :as => 'logout'
   get 'sign_in' => 'users#new', :as => 'sign_in'

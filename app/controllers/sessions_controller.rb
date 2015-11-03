@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if (user = User.where(name: params[:name]).try(:authenticate, params[:password]))
+    if (user = User.find_by(name: params[:name]).try(:authenticate, params[:password]))
       session[:user_id] = user.id
     else
       flash[:alert] = 'login failed, please try again'

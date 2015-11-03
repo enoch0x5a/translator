@@ -1,17 +1,17 @@
-- if translations_collection
-  = table_for translations_collection do
+- if (translations = current_user.try(:translations)) && translations.any?
+  = table_for translations do
     
-    - column :title => I18n.t(:input_text) do |translation|
+    - column :title => t(:input_text) do |translation|
       - link_to(translation.input_text, translation)
     
-    - column :output_text, :title => I18n.t(:output_text) do |text|
+    - column :output_text, :title => t(:output_text) do |text|
       - text
 
-    - column :from_lang, :title => I18n.t(:from_lang) do |abbrev|
+    - column :from_lang, :title => t(:from_lang) do |abbrev|
       - language_name_for abbrev
     
-    - column :to_lang, :title => I18n.t(:to_lang) do |abbrev|
+    - column :to_lang, :title => t(:to_lang) do |abbrev|
       - language_name_for abbrev
 
     - column :title => '' do |translation|
-      - link_to(I18n.t(:delete), translation_path(translation), method: :delete)
+      - link_to(t(:delete), translation_path(translation), method: :delete)
