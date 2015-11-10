@@ -18,8 +18,8 @@ module YatForRails
     end
 
     alias_method :detect_language, :detect
-    def detect_language(params = {})
-      text = params[:text] or return
+    def detect_language(text)
+      return unless (text = text)
       detect(text: text)['lang']
     end
 
@@ -31,11 +31,12 @@ module YatForRails
           text.to_s
         end
       raise TypeError unless text
+      return if text.empty?
 
       lang = \
         if to_lang.kind_of? String
           to_lang
-        else
+        elsif to_lang.respond_to? :[]
           to_lang[:to]
         end
       raise TypeError unless lang
@@ -55,5 +56,10 @@ module YatForRails
 
       { :dirs => translation_directions, :langs => t_d['langs'] }
     end
+
+    def detect(params)
+      super
+    end
+
   end
 end

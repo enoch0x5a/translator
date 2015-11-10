@@ -1,39 +1,36 @@
 class TranslationsController < ApplicationController
-  before_action :authorize, :only => [:save, :show, :update]
+  before_action :authorize, :only => [:save, :show, :update, :destroy]
 
   helper_method :translation,
-                :translation_directions,
                 :language_name_for,
-                :languages_select_options
+                :languages_select_options,
+                :translations_collection
 
   def index
-    render 'new'
-  end
-
-  def new
   end
 
   def create
-    auto_lang = params[:auto]
 
-    translation.output_text = translate(translation.input_text)
-    translation.from_lang =
-      auto_lang == 'true' ? determine_lang(translation.input_text) : translation.from_lang
-    render 'new'
+    translate!
+    render 'index'
   end
 
   def save
-    translation.output_text = translate(params[:auto])
-    current_user.try(:translations).create(input_text: @translation.input_text,
-                                           output_text: @translation.output_text,
-                                           from_lang: @translation.from_lang,
-                                           to_lang: @translation.to_lang)
-    render plain: 'ok'
+    if translate!
+      translations_collection.create( input_text: translation.input_text,
+                                      output_text: translation.output_text,
+                                      from_lang: params[:auto] == 'true' ?
+                                          translator.detect_language(@translation.input_text) :
+                                          translation_params[:from_lang],
+                                      to_lang: translation.to_lang)
+    end
+
+    render nothing: true
   end
 
   def show
     @translation = Translation.find(params[:id])
-    render 'new'
+    render 'index'
   end
 
   def update
@@ -43,26 +40,27 @@ class TranslationsController < ApplicationController
         @translation.send "#{param}=", value
       end
       @translation.update_columns( input_text: @translation.input_text,
-                                   output_text: translate(@translation.input_text),
+                                   output_text: translate,
                                    from_lang: params[:auto] == 'true' ?
-                                       determine_lang(@translation.input_text) :
+                                       translator.detect_language(@translation.input_text) :
                                        translation_params[:from_lang] )
     end
 
-    redirect_to root_path
+    redirect_to root_url
   end
 
   def destroy
     Translation.destroy(params[:id])
     @translation = Translation.new
-    redirect_to :back
+    redirect_to translations_url
   end
 
-  def dirs
-    render json: translation_directions
+  private
+  def translations_collection
+    @translations_collection ||= current_user.try(:translations)
   end
 
-private
+  protected
   def translation
     if params['translation']
       @translation ||= Translation.new(translation_params)
@@ -83,21 +81,27 @@ private
     @translation_directions ||= translator.translation_directions
   end
 
-  def determine_lang(text)
-    translator.detect_language(text: text)
-  end
-
   def languages_select_options
-    translation_directions[:langs].map {|k,v| [v,k]}.sort
+    @languages_select_options ||= translation_directions[:langs].map {|k,v| [v,k]}.sort
   end
 
   def language_name_for(abbrev)
-    translation_directions[:langs][abbrev]
+    translator.translation_directions[:langs][abbrev]
   end
 
-  # TODO: refactor it. Move method to model class
-  def translate(auto_lang = nil)
-    translation_direction = auto_lang ? translation.to_lang : "#{translation.from_lang}-#{translation.to_lang}"
-    translator.translate translation.input_text, to: translation_direction
+  #TODO: get rid of this monstrosity
+  def translate
+    return if translation.input_text.nil? || translation.input_text.empty?
+    if (auto_detect_lang = params[:auto])
+      translation.from_lang = translator.detect_language(translation.input_text)
+    end
+
+    translation_direction = auto_detect_lang ? translation.to_lang : "#{translation.from_lang}-#{translation.to_lang}"
+    translator.translate(translation.input_text, to: translation_direction)
+  end
+
+  alias_method :translate!, :translate
+  def translate!
+    translation.output_text = translate
   end
 end

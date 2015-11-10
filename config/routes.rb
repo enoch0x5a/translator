@@ -1,17 +1,14 @@
 Rails.application.routes.draw do
-  post 'sessions/create'
-
-  get 'sessions/destroy'
-
-  resources :translations
-  resources :users
-
 
   root 'sessions#new'
+
+  resources :translations, except: [ :edit, :new ]
+  resources :users, only: [ :create ]
+
   get 'login' => 'sessions#new', :as => 'login'
+  post 'sessions/create'
   get 'logout' => 'sessions#destroy', :as => 'logout'
-  get 'sign_in' => 'users#new', :as => 'sign_in'
-  post 'translations/save' => 'translations#save'
-  get 'translations/save' => 'translations#save'
-  get '/dirs' => 'translations#dirs'
+  get 'sign_up' => 'users#new', :as => 'sign_up'
+  get 'sign_off' => 'users#destroy', :as => 'sign_off'
+  post 'translations/save'
 end

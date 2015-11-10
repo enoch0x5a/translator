@@ -1,5 +1,5 @@
-- if (translations = current_user.try(:translations)) && translations.any?
-  = table_for translations do
+- if translations_collection.try(:any?)
+  = table_for translations_collection do
     
     - column :title => t(:input_text) do |translation|
       - link_to(translation.input_text, translation)

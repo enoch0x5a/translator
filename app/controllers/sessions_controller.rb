@@ -1,10 +1,12 @@
 class SessionsController < ApplicationController
   force_ssl if Rails.env.production?
+# TODO: authlogic
 
+  #login
   def new
     if session[:user_id]
-      session.reset unless User.find(session[:user_id])
-      redirect_to translations_path
+      session.reset unless current_user
+      redirect_to translations_url
     end
   end
 
@@ -14,11 +16,12 @@ class SessionsController < ApplicationController
     else
       flash[:alert] = 'login failed, please try again'
     end
-    redirect_to root_path
+    redirect_to root_url
   end
 
+  #logout
   def destroy
     session.clear
-    redirect_to root_path
+    redirect_to root_url
   end
 end
