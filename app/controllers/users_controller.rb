@@ -5,20 +5,21 @@ class UsersController < ApplicationController
   before_action :authorize, only: [:destroy]
 
   def new
-    redirect_to root_url if current_user
+    redirect_to root_url if current_user_session
   end
 
   def create
-    @user = User.new(user_params)
-    if @user.save
-      session[:user_id] = user.id
+    @user = User.create(user_params)
+    if @user
+      redirect_to root_path
+    else
+      render 'new'
     end
   end
 
-  def destroy
+def destroy
     current_user.destroy
-    session.clear
-    redirect_to sign_off_url
+    redirect_to root_url
   end
 
 protected

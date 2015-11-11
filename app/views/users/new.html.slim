@@ -1,3 +1,6 @@
+- if @user.try(:errors).try(:any?)
+  = 'yup!'
+
 .login
   = form_for user do |f|
     = f.label :name

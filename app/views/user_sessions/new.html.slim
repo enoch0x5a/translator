@@ -1,8 +1,12 @@
+- if @user_session.errors.any?
+  - render 'application/errors', object: @user_session
+
 h2 Log in!
-= form_tag sessions_create_path do
+
+= form_tag user_sessions_create_path do
   p
-    = label_tag :name
-    = text_field_tag :name
+    = label_tag :email
+    = text_field_tag :email
   p
     = label_tag :password
     = password_field_tag :password

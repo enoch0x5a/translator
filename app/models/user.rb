@@ -7,6 +7,11 @@ class User < ActiveRecord::Base
 
   validates_uniqueness_of :email
 
-  has_secure_password
+  # has_secure_password
+  acts_as_authentic do |c|
+    c.crypto_provider = Authlogic::CryptoProviders::BCrypt
+    c.crypted_password_field = :password_digest
+  end
+
 
 end

@@ -3,10 +3,10 @@
 class Translator::Application
   class << self
     attr_reader :translator
-
-    def translator
-      @translator ||= YatForRails::Translator.new
-    end
+  end
+  
+  def self.translator
+    @translator ||= YatForRails::Translator.new
   end
 
   YandexTranslator::configure.api_key =
