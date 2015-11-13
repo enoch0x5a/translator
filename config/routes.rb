@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   resources :translations, except: [ :edit, :new ]
   resources :users, only: [ :create ]
+  resources :user_sessions, only: [ :new, :create, :destroy ]
 
   get 'login' => 'user_sessions#new', :as => 'login'
   post 'user_sessions/create'
