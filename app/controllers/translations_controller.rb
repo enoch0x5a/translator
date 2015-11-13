@@ -10,7 +10,6 @@ class TranslationsController < ApplicationController
   end
 
   def create
-
     translate!
     render 'index'
   end
@@ -89,7 +88,6 @@ class TranslationsController < ApplicationController
     translator.translation_directions[:langs][abbrev]
   end
 
-  #TODO: get rid of this monstrosity
   def translate
     return if translation.input_text.nil? || translation.input_text.empty?
     if (auto_detect_lang = params[:auto])
@@ -100,7 +98,6 @@ class TranslationsController < ApplicationController
     translator.translate(translation.input_text, to: translation_direction)
   end
 
-  alias_method :translate!, :translate
   def translate!
     translation.output_text = translate
   end
