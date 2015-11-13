@@ -4,6 +4,7 @@ require 'rails/all'
 
 module YatForRails
   include YandexTranslator
+
   class YatForRails::Translator < YandexTranslator::Yat
 
     def initialize(params = {})
@@ -55,10 +56,6 @@ module YatForRails
       end
 
       { :dirs => translation_directions, :langs => t_d['langs'] }
-    end
-
-    def detect(params)
-      super
     end
 
   end
